@@ -1,6 +1,6 @@
 {
   "name": "nodejs-handle-net-client",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Handle.net rest api client with  Challenge-Response Request from Client to Server Authentication",
   "main": "dist/Handle.js",
   "scripts": {

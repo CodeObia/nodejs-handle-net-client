@@ -11,7 +11,7 @@ export class Handle {
     private nonce: string;
     private keyPath: string;
     private ServerURL: string;
-    private log: boolean = true;
+    private log: boolean;
     private index: string;
     private adminHandle: string;
     private config() {
@@ -21,7 +21,7 @@ export class Handle {
             }
         }
     }
-    constructor(ServerURL: string, userPrefix: string, keyPath: string) {
+    constructor(ServerURL: string, userPrefix: string, keyPath: string, log: boolean = false) {
 
         if (!ServerURL || !userPrefix || !keyPath)
             throw new Error("ServerURL and  userPrefix && keyPath are requerd");
@@ -36,8 +36,8 @@ export class Handle {
         this.user = this.userPrefix.split("/")[0];
         this.prefix = this.userPrefix.split("/")[1];
         this.adminHandle = this.userPrefix.split(":")[1];
-
-        this.MakeSession()
+        this.log = log;
+         this.MakeSession()
     }
 
     private MakeSession() {
@@ -80,12 +80,10 @@ export class Handle {
         return new Promise((resolve, reject) => {
             Handles();
             function Handles() {
-                axios.delete($this.ServerURL + 'api/handles/' + $this.prefix + '/' + ID, $this.config()).then((resp) => {
-                    console.log(resp.data)
+                axios.delete($this.ServerURL + '/api/handles/' + $this.prefix + '/' + ID, $this.config()).then((resp) => {
                     if (resp.data.responseCode == 1)
                         resolve(resp.data);
                 }).catch((e) => {
-                    console.log(e.response);
                     if (e.response.data.responseCode == 402 || e.response.status == 401) {
                         if ($this.log)
                             console.log('generating new session')
@@ -124,7 +122,6 @@ export class Handle {
                             "value": url
                         },
                     }], $this.config()).then((resp) => {
-                        console.log(resp.data)
                         if (resp.data.responseCode == 1)
                             resolve({ url: url, ID: ID, handle: resp.data.handle });
                     }).catch((e) => {
@@ -156,7 +153,6 @@ export class Handle {
                 }).then((resp) => {
                     resolve(resp.data);
                 }).catch((e) => {
-                    console.log(e.message)
                     if (e.response.data.responseCode == 402) {
                         if ($this.log)
                             console.log('generating new session')
