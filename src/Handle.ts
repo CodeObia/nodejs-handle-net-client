@@ -49,7 +49,7 @@ export class Handle {
                 if (this.log)
                     console.log('session has been generated', this.sessionId);
                 cmd.get(
-                    "{ echo '" + res.data.nonce + "' | base64 -D ; echo '" + this.nonce + "' | base64 -D ; } | openssl sha256 -sign " + this.keyPath + "  | base64",
+                    "{ echo '" + res.data.nonce + "' | base64 -d ; echo '" + this.nonce + "' | base64 -d ; } | openssl sha256 -sign " + this.keyPath + "  | base64",
                     (err: any, signature: any, std: any) => {
                         if (err)
                             console.error(err);
